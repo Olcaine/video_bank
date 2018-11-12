@@ -1,0 +1,24 @@
+{% extends "video_bank/base.html" %}
+{% load static %}
+{% block content %}
+
+        {% for movie in object_list %}
+        {% if movie.rented %}
+        <div class="col-4">
+            <div class="cardPresentation card m-2" style="width: 18rem;">
+                <h2 class="card-title">{{movie.title}}</h2>
+                <h3 class="card-title"></h3>
+                <img class="card-img-top" src="{{movie.picture.url}}" alt="Card image cap">
+                <div class="card-body">
+                    <!-- <p class="card-text">Actors : {{movie.actors}}</p>
+                    <p class="card-text">Directors : {{movie.director}}</p> -->
+                    <a href="{% url 'movies_detail' movie.slug %}" class="btn btn-primary">Détails</a>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        {{ empty }}
+        {% endif %}
+        {% endfor %}
+
+{% endblock %}

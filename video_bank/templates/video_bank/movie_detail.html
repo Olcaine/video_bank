@@ -1,0 +1,50 @@
+{% extends "video_bank/base.html" %}
+{% load static %}
+{% block content %}
+
+<div class="row">
+    <div class="col-6">
+        <img class="card-img-top p-3" src="{{movie.picture.url}}" alt="Card image cap">
+    </div>
+    <div class="col-6">
+        <div class="card p-2">
+            <div class="card-body m-2">
+                <h2 class="cardDetail card-title">{{movie.title}}</h2>
+                {% if movie.rented == True %}
+                <h3></h3>
+                {% else %}
+                <h3></h3>
+                {% endif %}
+                <p class="card-text">Synopsis : {{movie.synopsis}}</p>
+                <iframe src="{{movie.trailer_url}}?controls=1" width="500" height="300" allowfullscreen></iframe>
+                <p class="card-text">Actors : {{movie.actors}}</p>
+                <p class="card-text">Directors : {{movie.director}}</p>
+                <p class="card-text">Country : {{movie.country}}</p>
+                <p class="card-text">Length : {{movie.length}}</p>
+                <p class="card-text">Release Date : {{movie.release_date}}</p>
+                {% for genre in movie.genre.all %}
+                <p class="card-text"><small class="text-muted">{{genre}}</small></p>
+                <a href="{% url 'movies_update' movie.slug %}" class="btn btn-primary">Modifier</a>
+                <a href="{% url 'movies_delete' movie.slug %}" class="btn btn-primary">Supprimer</a>
+                <div class="rented">
+                {% if user.my_profile and not user.is_superuser and not movie.rented %}
+                    <form class="rent" action="{% url 'movies_rent_update' movie.id %}" method="post">
+                        <button class="btn_rent btn-primary" type="submit" name="button">Louer</button>
+                    </form>
+                    {% elif user.is_superuser and movie.rented %}
+                    <a href="#">Remettre a la location</a>
+                    {% elif user.is_superuser and not movie.rented %}
+                    <span> Le film est disponible</span>
+                    {% elif movie.rented %}
+                    <span color="red">Le film est déjà loué</span>
+                    {% else %}
+                    Connectez-vous pour pouvoir louer le film
+                    {% endif %}
+            </div>
+            {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
